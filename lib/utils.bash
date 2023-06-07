@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for pint.
 GH_REPO="https://github.com/cloudflare/pint"
 TOOL_NAME="pint"
 TOOL_TEST="pint version"
@@ -31,8 +30,6 @@ list_github_tags() {
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if pint has other means of determining installable versions.
 	list_github_tags
 }
 
@@ -41,8 +38,21 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for pint
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	local platform
+	[ "Linux" = "$(uname)" ] && platform="linux" || platform="darwin"
+
+	local arch
+	machine=$(uname -m)
+	if [[ $machine == "arm64" ]] || [[ $machine == "aarch64" ]]; then
+		arch="arm64"
+	elif [[ $machine == *"386"* ]]; then
+		arch="386"
+	else
+		arch="amd64"
+	fi
+
+    # https://github.com/cloudflare/pint/releases/download/v0.43.1/pint-0.43.1-linux-amd64.tar.gz
+	url="$GH_REPO/releases/download/v${version}/pint-${version}-${platform}-${arch}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -61,7 +71,6 @@ install_version() {
 		mkdir -p "$install_path"
 		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
-		# TODO: Assert pint executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
