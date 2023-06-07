@@ -54,7 +54,7 @@ download_release() {
     # https://github.com/cloudflare/pint/releases/download/v0.43.1/pint-0.43.1-linux-amd64.tar.gz
 	url="$GH_REPO/releases/download/v${version}/pint-${version}-${platform}-${arch}.tar.gz"
 
-	echo "* Downloading $TOOL_NAME release $version..."
+	echo "* Downloading $TOOL_NAME release $version at $url"
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
