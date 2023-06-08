@@ -22,7 +22,7 @@ download_release "$ASDF_INSTALL_VERSION" "$release_file"
 tar -vxzf "$release_file" -C "$ASDF_DOWNLOAD_PATH" || fail "Could not extract $release_file"
 
 # pint binaries are named after their arch so find whatever is executable and just rename it pint
-find $ASDF_DOWNLOAD_PATH/ -type f -executable -execdir mv {} pint \;
+find "$ASDF_DOWNLOAD_PATH/" -type f -perm +0111 -execdir mv {} pint \;
 
 # Remove the tar.gz file since we don't need to keep it
 rm "$release_file"
