@@ -51,7 +51,7 @@ download_release() {
 		arch="amd64"
 	fi
 
-    # https://github.com/cloudflare/pint/releases/download/v0.43.1/pint-0.43.1-linux-amd64.tar.gz
+	# https://github.com/cloudflare/pint/releases/download/v0.43.1/pint-0.43.1-linux-amd64.tar.gz
 	url="$GH_REPO/releases/download/v${version}/pint-${version}-${platform}-${arch}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version at $url"
